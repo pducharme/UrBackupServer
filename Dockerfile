@@ -22,17 +22,11 @@ CMD ["/sbin/my_init"]
  usermod -d /home nobody && \
  chown -R nobody:users /home
 
-VOLUME /var/lib/unifi-video
-VOLUME /var/log/unifi-video
+VOLUME /backup
 
 EXPOSE  55413 55414 55415 35623
-
-WORKDIR /usr/lib/unifi-video
 
 ADD run.sh /run.sh
 RUN chmod 755 /run.sh
 
 CMD ["/run.sh"]
-
-ENTRYPOINT ["/usr/sbin/start_urbackup_server"]
-CMD ["--no_daemon"]
