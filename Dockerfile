@@ -8,10 +8,10 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 
 ADD ./apt/ubuntu-sources.list /etc/apt/sources.list
+RUN add-apt-repository ppa:uroni/urbackup
 RUN apt-get update -q
-RUN apt-get -y install curl software-properties-common wget
+RUN apt-get -y install python-software-properties software-properties-common btrfs-tools urbackup-server
 
-  
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
 
@@ -22,27 +22,10 @@ CMD ["/sbin/my_init"]
  usermod -d /home nobody && \
  chown -R nobody:users /home
 
-
-#Update APT-GET list
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 16126D3A3E5C1192
-RUN 	apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 && \
-    echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | tee /etc/apt/sources.list.d/mongodb.list
-RUN 	wget -q -O -  http://www.ubnt.com/downloads/unifi-video/apt/unifi-video.gpg.key | apt-key add - && \
-  echo "deb [arch=amd64] http://www.ubnt.com/downloads/unifi-video/apt trusty ubiquiti" | tee /etc/apt/sources.list.d/ubiquity-video.list
- 
-RUN \
-  apt-get update -q && \
-  apt-get upgrade -y && \
-  apt-get dist-upgrade -y
-
-# Install Unifi-Video-Controller
-
-RUN apt-get install -y unifi-video --force-yes
-
 VOLUME /var/lib/unifi-video
 VOLUME /var/log/unifi-video
 
-EXPOSE  7447 1935 7443 7080 6666 80 443 554
+EXPOSE  55413 55414 55415 35623
 
 WORKDIR /usr/lib/unifi-video
 
@@ -51,3 +34,5 @@ RUN chmod 755 /run.sh
 
 CMD ["/run.sh"]
 
+ENTRYPOINT ["/usr/sbin/start_urbackup_server"]
+CMD ["--no_daemon"]
