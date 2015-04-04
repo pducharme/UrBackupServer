@@ -23,6 +23,8 @@ CMD ["/sbin/my_init"]
  chown -R nobody:users /home
 
 VOLUME /backup
+VOLUME /var/urbackup
+VOLUME /tmp
 
 EXPOSE  55413 55414 55415 35623
 
