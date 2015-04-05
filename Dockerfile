@@ -11,7 +11,6 @@ ADD ./apt/ubuntu-sources.list /etc/apt/sources.list
 RUN add-apt-repository ppa:uroni/urbackup
 RUN apt-get update -q
 RUN apt-get -y install python-software-properties software-properties-common btrfs-tools urbackup-server
-
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
 
@@ -23,7 +22,7 @@ CMD ["/sbin/my_init"]
  chown -R nobody:users /home
 
 VOLUME /backup
-VOLUME /var/urbackup
+VOLUME /home
 VOLUME /tmp
 
 EXPOSE  55413 55414 55415 35623
